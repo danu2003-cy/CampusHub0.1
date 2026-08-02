@@ -12,7 +12,17 @@ function Registrations() {
     { key: 'status', label: 'Status' },
     { key: 'registeredAt', label: 'Registered At' },
   ];
+    useEffect(() => {
 
+        registrationApi.getAll()
+            .then((response) => {
+                setRegistrations(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+    }, []);
   const placeholderData = [];
 
   return (
