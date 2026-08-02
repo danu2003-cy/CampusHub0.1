@@ -34,9 +34,20 @@ public class RegistrationController {
         return ResponseEntity.ok(registrationService.createRegistration(registrationDto));
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<RegistrationDto> updateRegistration(@PathVariable Long id, @RequestBody RegistrationDto registrationDto) {
-        return ResponseEntity.ok(registrationService.updateRegistration(id, registrationDto));
+    public ResponseEntity<RegistrationDto> updateRegistration(
+            @PathVariable Long id,
+            @RequestBody RegistrationDto registrationDto
+    ){
+
+        return ResponseEntity.ok(
+                registrationService.updateRegistration(
+                        id,
+                        registrationDto
+                )
+        );
+
     }
 
     @DeleteMapping("/{id}")
