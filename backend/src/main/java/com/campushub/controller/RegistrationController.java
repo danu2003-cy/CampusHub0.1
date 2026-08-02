@@ -20,28 +20,62 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @GetMapping
-    public ResponseEntity<List<RegistrationDto>> getAllRegistrations() {
-        return ResponseEntity.ok(registrationService.getAllRegistrations());
+    public ResponseEntity<List<RegistrationDto>> getAllRegistrations(){
+
+        return ResponseEntity.ok(
+                registrationService.getAllRegistrations()
+        );
+
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegistrationDto> getRegistrationById(@PathVariable Long id) {
-        return ResponseEntity.ok(registrationService.getRegistrationById(id));
+    public ResponseEntity<RegistrationDto> getRegistrationById(
+            @PathVariable Long id
+    ){
+
+        return ResponseEntity.ok(
+                registrationService.getRegistrationById(id)
+        );
+
     }
 
     @PostMapping
-    public ResponseEntity<RegistrationDto> createRegistration(@RequestBody RegistrationDto registrationDto) {
-        return ResponseEntity.ok(registrationService.createRegistration(registrationDto));
+    public ResponseEntity<RegistrationDto> createRegistration(
+            @RequestBody RegistrationDto registrationDto
+    ){
+
+        return ResponseEntity.ok(
+                registrationService.createRegistration(
+                        registrationDto
+                )
+        );
+
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<RegistrationDto> updateRegistration(@PathVariable Long id, @RequestBody RegistrationDto registrationDto) {
-        return ResponseEntity.ok(registrationService.updateRegistration(id, registrationDto));
+    public ResponseEntity<RegistrationDto> updateRegistration(
+            @PathVariable Long id,
+            @RequestBody RegistrationDto registrationDto
+    ){
+
+        return ResponseEntity.ok(
+                registrationService.updateRegistration(
+                        id,
+                        registrationDto
+                )
+        );
+
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRegistration(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRegistration(
+            @PathVariable Long id
+    ){
+
         registrationService.deleteRegistration(id);
+
         return ResponseEntity.noContent().build();
+
     }
 }

@@ -17,4 +17,5 @@ public class RegistrationDto {
     private Long userId;
     private String status; // PENDING, CONFIRMED, CANCELLED
     private LocalDateTime registeredAt;
+    private String eventTitle;
 }
