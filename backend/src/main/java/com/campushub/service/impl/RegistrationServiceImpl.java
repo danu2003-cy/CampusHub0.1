@@ -5,8 +5,8 @@ import com.campushub.repository.RegistrationRepository;
 import com.campushub.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
+import com.campushub.entity.Registration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
