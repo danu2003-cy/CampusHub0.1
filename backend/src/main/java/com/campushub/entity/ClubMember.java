@@ -29,9 +29,9 @@ public class ClubMember {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "role_in_club", length = 50)
+    @Column(name = "role_in_club", nullable = false, length = 50)
     private String roleInClub;
 
-    @Column(name = "joined_at")
+    @Column(name = "joined_at", nullable = false)
     private LocalDateTime joinedAt;
 }
