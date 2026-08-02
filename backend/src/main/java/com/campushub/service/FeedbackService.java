@@ -4,10 +4,8 @@ import com.campushub.dto.FeedbackDto;
 
 import java.util.List;
 
-/**
- * Service contract for Feedback management.
- * TODO (Member 6): implement business logic in FeedbackServiceImpl.
- */
+/*Service contract for Feedback management.*/
+
 public interface FeedbackService {
 
     List<FeedbackDto> getAllFeedback();
