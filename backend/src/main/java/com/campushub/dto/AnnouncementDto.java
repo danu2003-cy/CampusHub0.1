@@ -2,7 +2,7 @@ package com.campushub.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.time.LocalDateTime;
 /**
  * Data Transfer Object for Announcement.
  */
@@ -15,4 +15,5 @@ public class AnnouncementDto {
     private String title;
     private String content;
     private Long postedById;
+    private LocalDateTime postedAt;
 }
