@@ -29,8 +29,14 @@ public class RegistrationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RegistrationDto> getRegistrationById(@PathVariable Long id) {
-        return ResponseEntity.ok(registrationService.getRegistrationById(id));
+    public ResponseEntity<RegistrationDto> getRegistrationById(
+            @PathVariable Long id
+    ){
+
+        return ResponseEntity.ok(
+                registrationService.getRegistrationById(id)
+        );
+
     }
 
     @PostMapping
