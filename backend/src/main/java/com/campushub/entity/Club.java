@@ -19,14 +19,18 @@ public class Club {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 150)
+    @Column(nullable = false, unique = true, length = 150)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     // User who created / manages the club
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", referencedColumnName = "id")
+    @JoinColumn(
+            name = "created_by",
+            referencedColumnName = "id",
+            nullable = false
+    )
     private User createdBy;
 }
