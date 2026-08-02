@@ -32,10 +32,20 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public RegistrationDto getRegistrationById(Long id) {
-        // TODO: fetch registration by id and map to RegistrationDto
-        return null;
-    }
 
+
+        Registration registration =
+                registrationRepository.findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "Registration not found"
+                                )
+                        );
+
+
+        return mapToDto(registration);
+
+    }
     @Override
     public RegistrationDto createRegistration(RegistrationDto registrationDto) {
         // TODO: map RegistrationDto to entity, save, and return saved RegistrationDto
