@@ -45,6 +45,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
+
+        Optional<User> existingUser = userRepository.findByEmail(userDto.getEmail());
+
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(id)) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         User user = findUserById(id);
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
