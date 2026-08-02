@@ -111,6 +111,12 @@ public class RegistrationServiceImpl implements RegistrationService {
         return mapToDto(updated);
 
     }
+    @Override
+    public void deleteRegistration(Long id) {
 
+
+        registrationRepository.deleteById(id);
+
+    }
 
 }
