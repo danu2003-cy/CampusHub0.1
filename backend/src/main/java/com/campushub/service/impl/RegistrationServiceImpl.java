@@ -47,19 +47,70 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     }
     @Override
-    public RegistrationDto createRegistration(RegistrationDto registrationDto) {
-        // TODO: map RegistrationDto to entity, save, and return saved RegistrationDto
-        return null;
+    public RegistrationDto createRegistration(
+            RegistrationDto registrationDto
+    ) {
+
+
+        Registration registration =
+                new Registration();
+
+
+        registration.setRegisteredAt(
+                LocalDateTime.now()
+        );
+
+
+        registration.setStatus(
+                Registration.Status.PENDING
+        );
+
+
+        Registration saved =
+                registrationRepository.save(registration);
+
+
+
+        return mapToDto(saved);
+
+    }
+    @Override
+    public RegistrationDto updateRegistration(
+            Long id,
+            RegistrationDto registrationDto
+    ) {
+
+
+        Registration registration =
+                registrationRepository.findById(id)
+                        .orElseThrow(
+                                () -> new RuntimeException(
+                                        "Registration not found"
+                                )
+                        );
+
+
+
+        if(registrationDto.getStatus()!=null){
+
+            registration.setStatus(
+                    Registration.Status.valueOf(
+                            registrationDto.getStatus()
+                    )
+            );
+
+        }
+
+
+
+        Registration updated =
+                registrationRepository.save(registration);
+
+
+
+        return mapToDto(updated);
+
     }
 
-    @Override
-    public RegistrationDto updateRegistration(Long id, RegistrationDto registrationDto) {
-        // TODO: fetch existing registration, update fields, save, and return updated RegistrationDto
-        return null;
-    }
 
-    @Override
-    public void deleteRegistration(Long id) {
-        // TODO: delete registration by id
-    }
 }
