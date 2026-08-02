@@ -112,7 +112,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         if (announcement.getPostedBy() != null) {
             dto.setPostedById(announcement.getPostedBy().getId());
         }
-
+        dto.setPostedAt(announcement.getPostedAt());
+        
         return dto;
     }
 }
