@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         User savedUser = userRepository.save(mapToEntity(userDto));
         return mapToDto(savedUser);
     }
