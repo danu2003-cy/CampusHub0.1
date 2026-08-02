@@ -118,5 +118,44 @@ public class RegistrationServiceImpl implements RegistrationService {
         registrationRepository.deleteById(id);
 
     }
+    private RegistrationDto mapToDto(
+            Registration registration
+    ){
+
+        RegistrationDto dto =
+                new RegistrationDto();
+
+
+        dto.setId(
+                registration.getId()
+        );
+
+
+        if(registration.getEvent()!=null){
+
+            dto.setEventTitle(
+                    registration.getEvent().getTitle()
+            );
+
+        }
+
+
+        if(registration.getStatus()!=null){
+
+            dto.setStatus(
+                    registration.getStatus().name()
+            );
+
+        }
+
+
+        dto.setRegisteredAt(
+                registration.getRegisteredAt()
+        );
+
+
+        return dto;
+
+    }
 
 }
