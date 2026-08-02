@@ -40,8 +40,16 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<RegistrationDto> createRegistration(@RequestBody RegistrationDto registrationDto) {
-        return ResponseEntity.ok(registrationService.createRegistration(registrationDto));
+    public ResponseEntity<RegistrationDto> createRegistration(
+            @RequestBody RegistrationDto registrationDto
+    ){
+
+        return ResponseEntity.ok(
+                registrationService.createRegistration(
+                        registrationDto
+                )
+        );
+
     }
 
 
