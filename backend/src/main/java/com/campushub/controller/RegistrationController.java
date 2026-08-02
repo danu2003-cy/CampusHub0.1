@@ -20,8 +20,12 @@ public class RegistrationController {
     private RegistrationService registrationService;
 
     @GetMapping
-    public ResponseEntity<List<RegistrationDto>> getAllRegistrations() {
-        return ResponseEntity.ok(registrationService.getAllRegistrations());
+    public ResponseEntity<List<RegistrationDto>> getAllRegistrations(){
+
+        return ResponseEntity.ok(
+                registrationService.getAllRegistrations()
+        );
+
     }
 
     @GetMapping("/{id}")
