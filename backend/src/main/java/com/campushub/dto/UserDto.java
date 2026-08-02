@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 /**
  * Data Transfer Object for User.
- * TODO (Member 2): map fields to/from the User entity in the service layer.
  */
 @Data
 @NoArgsConstructor
