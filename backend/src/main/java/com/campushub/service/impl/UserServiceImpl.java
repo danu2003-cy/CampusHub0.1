@@ -1,18 +1,17 @@
 package com.campushub.service.impl;
 
 import com.campushub.dto.UserDto;
+import com.campushub.entity.User;
+import com.campushub.exception.ResourceNotFoundException;
 import com.campushub.repository.UserRepository;
 import com.campushub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
- * Placeholder implementation of UserService.
- * TODO (Member 2): implement mapping between User entity and UserDto,
- * and add real business logic for each method below.
+ * Implementation of UserService.
  */
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,30 +21,63 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        // TODO: fetch users and map to UserDto list
-        return Collections.emptyList();
+        return userRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
     }
 
     @Override
     public UserDto getUserById(Long id) {
-        // TODO: fetch user by id and map to UserDto
-        return null;
+        User user = findUserById(id);
+        return mapToDto(user);
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        // TODO: map UserDto to entity, save, and return saved UserDto
-        return null;
+        User savedUser = userRepository.save(mapToEntity(userDto));
+        return mapToDto(savedUser);
     }
 
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
-        // TODO: fetch existing user, update fields, save, and return updated UserDto
-        return null;
+        User user = findUserById(id);
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setRole(User.Role.valueOf(userDto.getRole()));
+
+        User updatedUser = userRepository.save(user);
+        return mapToDto(updatedUser);
     }
 
     @Override
     public void deleteUser(Long id) {
-        // TODO: delete user by id
+        User user = findUserById(id);
+        userRepository.delete(user);
+    }
+
+    private User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    }
+
+    private UserDto mapToDto(User user) {
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole().name()
+        );
+    }
+
+    private User mapToEntity(UserDto userDto) {
+        return new User(
+                userDto.getId(),
+                userDto.getName(),
+                userDto.getEmail(),
+                userDto.getPassword(),
+                User.Role.valueOf(userDto.getRole())
+        );
     }
 }
