@@ -1,12 +1,10 @@
 package com.campushub.dto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import java.time.LocalDateTime;
 /**
  * Data Transfer Object for Announcement.
- * TODO (Member 6): map fields to/from the Announcement entity in the service layer.
  */
 @Data
 @NoArgsConstructor
@@ -17,4 +15,5 @@ public class AnnouncementDto {
     private String title;
     private String content;
     private Long postedById;
+    private LocalDateTime postedAt;
 }

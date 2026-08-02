@@ -1,51 +1,115 @@
 package com.campushub.service.impl;
 
 import com.campushub.dto.FeedbackDto;
+import com.campushub.entity.Event;
+import com.campushub.entity.Feedback;
+import com.campushub.entity.User;
+import com.campushub.repository.EventRepository;
 import com.campushub.repository.FeedbackRepository;
+import com.campushub.repository.UserRepository;
 import com.campushub.service.FeedbackService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Placeholder implementation of FeedbackService.
- * TODO (Member 6): implement mapping between Feedback entity and FeedbackDto,
- * and add real business logic for each method below.
- */
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public List<FeedbackDto> getAllFeedback() {
-        // TODO: fetch feedback and map to FeedbackDto list
-        return Collections.emptyList();
+
+        return feedbackRepository.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public FeedbackDto getFeedbackById(Long id) {
-        // TODO: fetch feedback by id and map to FeedbackDto
-        return null;
+
+        Feedback feedback = feedbackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        return convertToDto(feedback);
     }
 
     @Override
     public FeedbackDto createFeedback(FeedbackDto feedbackDto) {
-        // TODO: map FeedbackDto to entity, save, and return saved FeedbackDto
-        return null;
+
+        Event event = eventRepository.findById(feedbackDto.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        User user = userRepository.findById(feedbackDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Feedback feedback = new Feedback();
+
+        feedback.setEvent(event);
+        feedback.setUser(user);
+        feedback.setRating(feedbackDto.getRating());
+        feedback.setComments(feedbackDto.getComments());
+        feedback.setSubmittedAt(LocalDateTime.now());
+
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+
+        return convertToDto(savedFeedback);
     }
 
     @Override
     public FeedbackDto updateFeedback(Long id, FeedbackDto feedbackDto) {
-        // TODO: fetch existing feedback, update fields, save, and return updated FeedbackDto
-        return null;
+
+        Feedback feedback = feedbackRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Feedback not found"));
+
+        Event event = eventRepository.findById(feedbackDto.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        User user = userRepository.findById(feedbackDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        feedback.setEvent(event);
+        feedback.setUser(user);
+        feedback.setRating(feedbackDto.getRating());
+        feedback.setComments(feedbackDto.getComments());
+
+        Feedback updatedFeedback = feedbackRepository.save(feedback);
+
+        return convertToDto(updatedFeedback);
     }
 
     @Override
     public void deleteFeedback(Long id) {
-        // TODO: delete feedback by id
+
+        if (!feedbackRepository.existsById(id)) {
+            throw new RuntimeException("Feedback not found");
+        }
+
+        feedbackRepository.deleteById(id);
+    }
+
+    private FeedbackDto convertToDto(Feedback feedback) {
+
+        FeedbackDto dto = new FeedbackDto();
+
+        dto.setId(feedback.getId());
+        dto.setEventId(feedback.getEvent().getId());
+        dto.setUserId(feedback.getUser().getId());
+        dto.setRating(feedback.getRating());
+        dto.setComments(feedback.getComments());
+
+        return dto;
     }
 }

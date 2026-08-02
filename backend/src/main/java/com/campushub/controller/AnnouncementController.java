@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * REST controller for Announcement management.
- * TODO (Member 6): wire up real responses once AnnouncementServiceImpl is implemented.
  */
 @RestController
 @RequestMapping("/api/announcements")
