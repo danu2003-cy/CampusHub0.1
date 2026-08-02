@@ -23,7 +23,7 @@ function Registrations() {
             });
 
     }, []);
-  const placeholderData = [];
+
 
   return (
     <div className="page">
