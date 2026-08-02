@@ -68,11 +68,23 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    private User findUserById(Long id) {
+    /**
+     * Converts a UserDto into a User entity.
+     *
+     * @param userDto DTO object
+     * @return entity representation
+     */
+    private User mapToEntity(UserDto userDto) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
+    /**
+     * Converts a User entity into a UserDto.
+     *
+     * @param user entity object
+     * @return DTO representation
+     */
     private UserDto mapToDto(User user) {
         return new UserDto(
                 user.getId(),
@@ -83,6 +95,12 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    /**
+     * Converts a UserDto into a User entity.
+     *
+     * @param userDto DTO object
+     * @return entity representation
+     */
     private User mapToEntity(UserDto userDto) {
         return new User(
                 userDto.getId(),
