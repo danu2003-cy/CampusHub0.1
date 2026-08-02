@@ -22,8 +22,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public List<RegistrationDto> getAllRegistrations() {
-        // TODO: fetch registrations and map to RegistrationDto list
-        return Collections.emptyList();
+
+        return registrationRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+
     }
 
     @Override
