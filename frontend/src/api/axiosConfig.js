@@ -6,7 +6,7 @@ import axios from 'axios';
  * and add interceptors here once auth tokens/sessions are introduced.
  */
 const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api',
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8081/api',
   headers: {
     'Content-Type': 'application/json',
   },
