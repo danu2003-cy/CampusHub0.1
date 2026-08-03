@@ -3,7 +3,7 @@
 -- Run schema.sql first, then this file, to get a working dev DB.
 -- ============================================================
 
-USE campushub;
+USE campushub_db;
 
 -- ---------- users ----------
 INSERT INTO users (name, email, password, role) VALUES

@@ -1,6 +1,5 @@
 import apiClient from './axiosConfig';
 
-// TODO (Member 6): use these functions inside the Announcements page.
 const announcementApi = {
   getAll: () => apiClient.get('/announcements'),
   getById: (id) => apiClient.get(`/announcements/${id}`),

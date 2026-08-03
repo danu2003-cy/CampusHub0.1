@@ -13,8 +13,7 @@ import Feedback from '../pages/Feedback';
 import NotFound from '../pages/NotFound';
 
 /**
- * Central route configuration for the app.
- * TODO (team): add protected/private routes once authentication is implemented.
+ * Central routing configuration.
  */
 function AppRoutes() {
   return (

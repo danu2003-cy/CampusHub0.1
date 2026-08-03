@@ -5,6 +5,7 @@ import com.campushub.dto.ClubMemberDto;
 import com.campushub.entity.Club;
 import com.campushub.entity.ClubMember;
 import com.campushub.entity.User;
+import com.campushub.exception.ResourceNotFoundException;
 import com.campushub.repository.ClubMemberRepository;
 import com.campushub.repository.ClubRepository;
 import com.campushub.repository.UserRepository;
@@ -40,27 +41,17 @@ public class ClubServiceImpl implements ClubService {
     public ClubDto getClubById(Long id) {
         Club club = clubRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Club not found with ID: " + id));
+                        new ResourceNotFoundException("Club not found with id: " + id));
 
         return convertToClubDto(club);
     }
 
     @Override
     public ClubDto createClub(ClubDto clubDto) {
-        if (clubDto.getName() == null || clubDto.getName().trim().isEmpty()) {
-            throw new RuntimeException("Club name is required");
-        }
-
-        if (clubDto.getCreatedById() == null) {
-            throw new RuntimeException("Creator user ID is required");
-        }
-
         User creator = userRepository.findById(clubDto.getCreatedById())
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with ID: "
-                                        + clubDto.getCreatedById()
-                        ));
+                        new ResourceNotFoundException(
+                                "User not found with id: " + clubDto.getCreatedById()));
 
         Club club = new Club();
         club.setName(clubDto.getName());
@@ -68,7 +59,6 @@ public class ClubServiceImpl implements ClubService {
         club.setCreatedBy(creator);
 
         Club savedClub = clubRepository.save(club);
-
         return convertToClubDto(savedClub);
     }
 
@@ -76,10 +66,9 @@ public class ClubServiceImpl implements ClubService {
     public ClubDto updateClub(Long id, ClubDto clubDto) {
         Club existingClub = clubRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Club not found with ID: " + id));
+                        new ResourceNotFoundException("Club not found with id: " + id));
 
-        if (clubDto.getName() != null
-                && !clubDto.getName().trim().isEmpty()) {
+        if (clubDto.getName() != null && !clubDto.getName().trim().isEmpty()) {
             existingClub.setName(clubDto.getName());
         }
 
@@ -90,16 +79,12 @@ public class ClubServiceImpl implements ClubService {
         if (clubDto.getCreatedById() != null) {
             User creator = userRepository.findById(clubDto.getCreatedById())
                     .orElseThrow(() ->
-                            new RuntimeException(
-                                    "User not found with ID: "
-                                            + clubDto.getCreatedById()
-                            ));
-
+                            new ResourceNotFoundException(
+                                    "User not found with id: " + clubDto.getCreatedById()));
             existingClub.setCreatedBy(creator);
         }
 
         Club updatedClub = clubRepository.save(existingClub);
-
         return convertToClubDto(updatedClub);
     }
 
@@ -107,32 +92,26 @@ public class ClubServiceImpl implements ClubService {
     public void deleteClub(Long id) {
         Club club = clubRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Club not found with ID: " + id));
+                        new ResourceNotFoundException("Club not found with id: " + id));
 
-        List<ClubMember> members =
-                clubMemberRepository.findByClub_Id(id);
-
+        List<ClubMember> members = clubMemberRepository.findByClub_Id(id);
         clubMemberRepository.deleteAll(members);
         clubRepository.delete(club);
     }
 
     @Override
     public ClubMemberDto joinClub(Long clubId, Long userId) {
-        if (clubMemberRepository
-                .existsByClub_IdAndUser_Id(clubId, userId)) {
-            throw new RuntimeException(
-                    "User is already a member of this club");
+        if (clubMemberRepository.existsByClub_IdAndUser_Id(clubId, userId)) {
+            throw new RuntimeException("User is already a member of this club");
         }
 
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "Club not found with ID: " + clubId));
+                        new ResourceNotFoundException("Club not found with id: " + clubId));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found with ID: " + userId));
+                        new ResourceNotFoundException("User not found with id: " + userId));
 
         ClubMember clubMember = new ClubMember();
         clubMember.setClub(club);
@@ -140,9 +119,7 @@ public class ClubServiceImpl implements ClubService {
         clubMember.setRoleInClub("MEMBER");
         clubMember.setJoinedAt(LocalDateTime.now());
 
-        ClubMember savedMember =
-                clubMemberRepository.save(clubMember);
-
+        ClubMember savedMember = clubMemberRepository.save(clubMember);
         return convertToClubMemberDto(savedMember);
     }
 
@@ -151,8 +128,7 @@ public class ClubServiceImpl implements ClubService {
         ClubMember clubMember = clubMemberRepository
                 .findByClub_IdAndUser_Id(clubId, userId)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "User is not a member of this club"));
+                        new ResourceNotFoundException("User is not a member of this club"));
 
         clubMemberRepository.delete(clubMember);
     }
@@ -160,8 +136,7 @@ public class ClubServiceImpl implements ClubService {
     @Override
     public List<ClubMemberDto> getClubMembers(Long clubId) {
         if (!clubRepository.existsById(clubId)) {
-            throw new RuntimeException(
-                    "Club not found with ID: " + clubId);
+            throw new ResourceNotFoundException("Club not found with id: " + clubId);
         }
 
         return clubMemberRepository.findByClub_Id(clubId)
@@ -172,7 +147,6 @@ public class ClubServiceImpl implements ClubService {
 
     private ClubDto convertToClubDto(Club club) {
         Long createdById = null;
-
         if (club.getCreatedBy() != null) {
             createdById = club.getCreatedBy().getId();
         }
@@ -185,14 +159,13 @@ public class ClubServiceImpl implements ClubService {
         );
     }
 
-    private ClubMemberDto convertToClubMemberDto(
-            ClubMember clubMember) {
-
+    private ClubMemberDto convertToClubMemberDto(ClubMember clubMember) {
         return new ClubMemberDto(
                 clubMember.getId(),
                 clubMember.getClub().getId(),
                 clubMember.getUser().getId(),
-                clubMember.getRoleInClub()
+                clubMember.getRoleInClub(),
+                clubMember.getJoinedAt()
         );
     }
 }

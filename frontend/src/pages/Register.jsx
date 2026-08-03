@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import userApi from '../api/userApi';
+import toast from 'react-hot-toast';
 
 /**
- * Simple registration page with a role selector (ADMIN/STUDENT).
- * TODO (Member 2): connect this form to POST /api/users once implemented.
+ * Registration page — creates a new user via POST /api/users.
  */
 function Register() {
   const [form, setForm] = useState({
@@ -11,15 +13,34 @@ function Register() {
     password: '',
     role: 'STUDENT',
   });
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: call register API
-    console.log('Register submitted', form);
+
+    if (!form.name.trim() || !form.email.trim() || !form.password.trim()) {
+      toast.error('Please fill in all fields.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await userApi.create(form);
+      toast.success('Registration successful! Please login.');
+      navigate('/login');
+    } catch (error) {
+      const msg = error.response?.data?.message
+        || error.response?.data?.errors?.join(', ')
+        || 'Registration failed.';
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,8 +78,13 @@ function Register() {
             <option value="ADMIN">Admin</option>
           </select>
         </label>
-        <button type="submit" className="btn">Register</button>
+        <button type="submit" className="btn" disabled={loading}>
+          {loading ? 'Registering...' : 'Register'}
+        </button>
       </form>
+      <p style={{ marginTop: '1rem' }}>
+        Already have an account? <Link to="/login">Login here</Link>
+      </p>
     </div>
   );
 }

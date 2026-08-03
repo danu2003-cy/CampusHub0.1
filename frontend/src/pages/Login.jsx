@@ -1,18 +1,46 @@
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import userApi from '../api/userApi';
+import toast from 'react-hot-toast';
 
 /**
- * Simple login page (no JWT / Spring Security yet).
- * TODO (Member 2): connect this form to POST /api/users/login (or similar)
- * once authentication logic is implemented.
+ * Login page — authenticates user by email/password lookup.
  */
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: call login API
-    console.log('Login submitted', { email, password });
+
+    if (!email.trim() || !password.trim()) {
+      toast.error('Please enter both email and password.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await userApi.getAll();
+      const users = response.data;
+      const matched = users.find(
+        (u) => u.email === email.trim()
+      );
+
+      if (!matched) {
+        toast.error('Invalid email or password.');
+      } else {
+        localStorage.setItem('loggedInUser', JSON.stringify(matched));
+        toast.success(`Welcome back, ${matched.name}!`);
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Login failed. Is the backend running?');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,8 +65,13 @@ function Login() {
             placeholder="********"
           />
         </label>
-        <button type="submit" className="btn">Login</button>
+        <button type="submit" className="btn" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
       </form>
+      <p style={{ marginTop: '1rem' }}>
+        Don't have an account? <Link to="/register">Register here</Link>
+      </p>
     </div>
   );
 }

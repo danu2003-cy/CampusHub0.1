@@ -1,6 +1,5 @@
 import apiClient from './axiosConfig';
 
-// TODO (Member 6): use these functions inside the Feedback page.
 const feedbackApi = {
   getAll: () => apiClient.get('/feedback'),
   getById: (id) => apiClient.get(`/feedback/${id}`),

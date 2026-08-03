@@ -106,7 +106,7 @@ function Events() {
       })
       .catch(() => {
         if (!ignore) {
-          setError('Could not load events. Is the backend running on port 8080?');
+          setError('Could not load events. Is the backend running on port 8081?');
         }
       })
       .finally(() => {

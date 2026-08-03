@@ -2,6 +2,7 @@ package com.campushub.controller;
 
 import com.campushub.dto.FeedbackDto;
 import com.campushub.service.FeedbackService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import java.util.List;
 
 /**
  * REST controller for Feedback management.
- 
  */
 @RestController
 @RequestMapping("/api/feedback")
@@ -30,7 +30,7 @@ public class FeedbackController {
     }
 
     @PostMapping
-    public ResponseEntity<FeedbackDto> createFeedback(@RequestBody FeedbackDto feedbackDto) {
+    public ResponseEntity<FeedbackDto> createFeedback(@Valid @RequestBody FeedbackDto feedbackDto) {
         return ResponseEntity.ok(feedbackService.createFeedback(feedbackDto));
     }
 

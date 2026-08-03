@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Service contract for Registration management.
- * TODO (Member 5): implement business logic in RegistrationServiceImpl.
  */
 public interface RegistrationService {
 

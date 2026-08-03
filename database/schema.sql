@@ -3,8 +3,8 @@
 -- University Event & Student Activity Management System
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS campushub;
-USE campushub;
+CREATE DATABASE IF NOT EXISTS campushub_db;
+USE campushub_db;
 
 -- ---------- users ----------
 CREATE TABLE IF NOT EXISTS users (
