@@ -7,8 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * Global CORS configuration so the React frontend (running on a different port)
  * can communicate with this backend during development.
- *
- * TODO (team): tighten allowed origins before deploying to production.
  */
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
