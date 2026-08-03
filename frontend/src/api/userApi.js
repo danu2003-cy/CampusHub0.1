@@ -1,6 +1,5 @@
 import apiClient from './axiosConfig';
 
-// TODO (Member 2): use these functions inside Login/Register/Dashboard pages.
 const userApi = {
   getAll: () => apiClient.get('/users'),
   getById: (id) => apiClient.get(`/users/${id}`),

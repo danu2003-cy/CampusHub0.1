@@ -3,6 +3,7 @@ package com.campushub.controller;
 import com.campushub.dto.ClubDto;
 import com.campushub.dto.EventDto;
 import com.campushub.service.EventService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto) {
+    public ResponseEntity<EventDto> createEvent(@Valid @RequestBody EventDto eventDto) {
         return ResponseEntity.ok(eventService.createEvent(eventDto));
     }
 

@@ -4,6 +4,7 @@ import com.campushub.dto.AnnouncementDto;
 import com.campushub.entity.Announcement;
 import com.campushub.entity.Club;
 import com.campushub.entity.User;
+import com.campushub.exception.ResourceNotFoundException;
 import com.campushub.repository.AnnouncementRepository;
 import com.campushub.repository.ClubRepository;
 import com.campushub.repository.UserRepository;
@@ -30,7 +31,6 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public List<AnnouncementDto> getAllAnnouncements() {
-
         return announcementRepository.findAll()
                 .stream()
                 .map(this::convertToDto)
@@ -39,24 +39,22 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public AnnouncementDto getAnnouncementById(Long id) {
-
         Announcement announcement = announcementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Announcement not found"));
-
+                .orElseThrow(() -> new ResourceNotFoundException("Announcement not found with id: " + id));
         return convertToDto(announcement);
     }
 
     @Override
     public AnnouncementDto createAnnouncement(AnnouncementDto announcementDto) {
-
         Club club = clubRepository.findById(announcementDto.getClubId())
-                .orElseThrow(() -> new RuntimeException("Club not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Club not found with id: " + announcementDto.getClubId()));
 
         User user = userRepository.findById(announcementDto.getPostedById())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with id: " + announcementDto.getPostedById()));
 
         Announcement announcement = new Announcement();
-
         announcement.setClub(club);
         announcement.setTitle(announcementDto.getTitle());
         announcement.setContent(announcementDto.getContent());
@@ -64,46 +62,50 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcement.setPostedAt(LocalDateTime.now());
 
         Announcement savedAnnouncement = announcementRepository.save(announcement);
-
         return convertToDto(savedAnnouncement);
     }
 
     @Override
     public AnnouncementDto updateAnnouncement(Long id, AnnouncementDto announcementDto) {
-
         Announcement announcement = announcementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Announcement not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Announcement not found with id: " + id));
 
-        Club club = clubRepository.findById(announcementDto.getClubId())
-                .orElseThrow(() -> new RuntimeException("Club not found"));
+        if (announcementDto.getClubId() != null) {
+            Club club = clubRepository.findById(announcementDto.getClubId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Club not found with id: " + announcementDto.getClubId()));
+            announcement.setClub(club);
+        }
 
-        User user = userRepository.findById(announcementDto.getPostedById())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (announcementDto.getPostedById() != null) {
+            User user = userRepository.findById(announcementDto.getPostedById())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "User not found with id: " + announcementDto.getPostedById()));
+            announcement.setPostedBy(user);
+        }
 
-        announcement.setClub(club);
-        announcement.setTitle(announcementDto.getTitle());
-        announcement.setContent(announcementDto.getContent());
-        announcement.setPostedBy(user);
+        if (announcementDto.getTitle() != null) {
+            announcement.setTitle(announcementDto.getTitle());
+        }
+
+        if (announcementDto.getContent() != null) {
+            announcement.setContent(announcementDto.getContent());
+        }
 
         Announcement updatedAnnouncement = announcementRepository.save(announcement);
-
         return convertToDto(updatedAnnouncement);
     }
 
     @Override
     public void deleteAnnouncement(Long id) {
-
         if (!announcementRepository.existsById(id)) {
-            throw new RuntimeException("Announcement not found");
+            throw new ResourceNotFoundException("Announcement not found with id: " + id);
         }
-
         announcementRepository.deleteById(id);
     }
 
     private AnnouncementDto convertToDto(Announcement announcement) {
-
         AnnouncementDto dto = new AnnouncementDto();
-
         dto.setId(announcement.getId());
         dto.setClubId(announcement.getClub().getId());
         dto.setTitle(announcement.getTitle());
@@ -113,7 +115,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             dto.setPostedById(announcement.getPostedBy().getId());
         }
         dto.setPostedAt(announcement.getPostedAt());
-        
+
         return dto;
     }
 }

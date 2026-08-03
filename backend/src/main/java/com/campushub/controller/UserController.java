@@ -2,6 +2,7 @@ package com.campushub.controller;
 
 import com.campushub.dto.UserDto;
 import com.campushub.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import java.util.List;
 
 /**
  * REST controller for User management.
- * TODO (Member 2): wire up real responses once UserServiceImpl is implemented.
  */
 @RestController
 @RequestMapping("/api/users")
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.createUser(userDto));
     }
 

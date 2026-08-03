@@ -1,6 +1,5 @@
 import apiClient from './axiosConfig';
 
-// TODO (Member 5): use these functions inside the Registrations page.
 const registrationApi = {
 
   // Get all registrations

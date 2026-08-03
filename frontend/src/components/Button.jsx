@@ -2,7 +2,6 @@ import React from 'react';
 
 /**
  * Reusable button component.
- * TODO (team): extend with variants (primary/secondary/danger) as needed.
  */
 function Button({ children, onClick, type = 'button', className = '' }) {
   return (

@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * Data Transfer Object for ClubMember.
- * TODO (Member 3): map fields to/from the ClubMember entity in the service layer.
  */
 @Data
 @NoArgsConstructor
@@ -16,4 +17,5 @@ public class ClubMemberDto {
     private Long clubId;
     private Long userId;
     private String roleInClub;
+    private LocalDateTime joinedAt;
 }

@@ -2,6 +2,7 @@ package com.campushub.controller;
 
 import com.campushub.dto.AnnouncementDto;
 import com.campushub.service.AnnouncementService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +30,15 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public ResponseEntity<AnnouncementDto> createAnnouncement(@RequestBody AnnouncementDto announcementDto) {
+    public ResponseEntity<AnnouncementDto> createAnnouncement(
+            @Valid @RequestBody AnnouncementDto announcementDto) {
         return ResponseEntity.ok(announcementService.createAnnouncement(announcementDto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnnouncementDto> updateAnnouncement(@PathVariable Long id, @RequestBody AnnouncementDto announcementDto) {
+    public ResponseEntity<AnnouncementDto> updateAnnouncement(
+            @PathVariable Long id,
+            @RequestBody AnnouncementDto announcementDto) {
         return ResponseEntity.ok(announcementService.updateAnnouncement(id, announcementDto));
     }
 

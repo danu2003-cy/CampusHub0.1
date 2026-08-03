@@ -6,10 +6,8 @@ import Footer from './components/Footer';
 import AppRoutes from './routes/AppRoutes';
 
 /**
- * Root application component.
- * Lays out the Navbar, Sidebar, main routed content, and Footer.
- * TODO (team): replace the static layout with real auth-aware navigation
- * once the Login/Register flow is implemented.
+ * Root component establishing the global layout (Navbar, Sidebar)
+ * and providing the routing context.
  */
 function App() {
   return (

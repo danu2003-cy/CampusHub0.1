@@ -4,7 +4,6 @@ import React from 'react';
  * Reusable, generic table component.
  * columns: array of { key, label }
  * data: array of row objects
- * TODO (team): add sorting/pagination once real data is wired up.
  */
 function Table({ columns = [], data = [] }) {
   if (!data.length) {

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 /**
  * Sidebar navigation, mainly used inside the Dashboard area.
- * TODO (team): hide/show links based on ADMIN vs STUDENT role.
  */
 function Sidebar() {
   return (

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 /**
  * Top navigation bar.
- * TODO (team): show different links depending on logged-in user / role.
  */
 function Navbar() {
   return (

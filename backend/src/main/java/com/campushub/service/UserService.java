@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Service contract for User management.
- * TODO (Member 2): implement business logic in UserServiceImpl.
  */
 public interface UserService {
 
