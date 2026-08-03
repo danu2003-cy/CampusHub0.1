@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Service contract for Announcement management.
- * TODO (Member 6): implement business logic in AnnouncementServiceImpl.
  */
 public interface AnnouncementService {
 
