@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import userApi from '../api/userApi';
+import authApi from '../api/authApi';
 import toast from 'react-hot-toast';
 
 /**
- * Login page — authenticates user by email/password lookup.
+ * Login page — authenticates user via POST /api/auth/login, which
+ * verifies the email/password combination server-side.
  */
 function Login() {
   const [email, setEmail] = useState('');
@@ -22,22 +23,19 @@ function Login() {
 
     setLoading(true);
     try {
-      const response = await userApi.getAll();
-      const users = response.data;
-      const matched = users.find(
-        (u) => u.email === email.trim()
-      );
+      const response = await authApi.login(email.trim(), password);
+      const user = response.data;
 
-      if (!matched) {
-        toast.error('Invalid email or password.');
-      } else {
-        localStorage.setItem('loggedInUser', JSON.stringify(matched));
-        toast.success(`Welcome back, ${matched.name}!`);
-        navigate('/dashboard');
-      }
+      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      toast.success(`Welcome back, ${user.name}!`);
+      navigate('/dashboard');
     } catch (error) {
-      console.error(error);
-      toast.error('Login failed. Is the backend running?');
+      if (error.response?.status === 401) {
+        toast.error(error.response?.data?.message || 'Invalid email or password.');
+      } else {
+        console.error(error);
+        toast.error('Login failed. Is the backend running?');
+      }
     } finally {
       setLoading(false);
     }
