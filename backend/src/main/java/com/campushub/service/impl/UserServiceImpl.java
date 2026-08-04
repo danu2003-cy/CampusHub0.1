@@ -2,6 +2,7 @@ package com.campushub.service.impl;
 
 import com.campushub.dto.UserDto;
 import com.campushub.entity.User;
+import com.campushub.exception.InvalidCredentialsException;
 import com.campushub.exception.ResourceNotFoundException;
 import com.campushub.repository.UserRepository;
 import com.campushub.service.UserService;
@@ -49,6 +50,18 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
         return convertToDto(savedUser);
+    }
+
+    @Override
+    public UserDto authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password."));
+
+        if (!user.getPassword().equals(password)) {
+            throw new InvalidCredentialsException("Invalid email or password.");
+        }
+
+        return convertToDto(user);
     }
 
     @Override
